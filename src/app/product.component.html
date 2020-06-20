@@ -1,0 +1,207 @@
+<div class="bg-primary text-white m-2 p-2">
+  There are {{ model.getProducts().length }} products in the stock
+</div>
+
+<!-- <div [class]="getClasses(1)">
+  First product {{ model.getProductById(1).name }}
+</div>
+<div [class]="getClasses(2)">
+  First product {{ model.getProductById(2).name }}
+</div> -->
+<div>
+  <p>
+    {{ today | date: "medium" }}
+  </p>
+</div>
+<!-- Map -->
+<div [class]="getClasses(1)" [ngClass]="getClassMap(1)">
+  First
+  <span [style.color]="color">
+    product
+  </span>
+  {{ model.getProductById(1).name }}
+</div>
+<div [class]="getClasses(2)" [ngClass]="getClassMap(2)">
+  First
+  <span>
+    product
+  </span>
+  {{ model.getProductById(2).name }}
+</div>
+
+<!-- <div>
+  <h2>
+    {{ product.name }}
+  </h2>
+  <h2 [textContent]="product.name"></h2>
+  <img width="250" height="250" src="assets/img/{{product.imageUrl}}">
+</div> -->
+
+<button name="btn1" (click)="onSubmit($event)">
+  Submit
+</button>
+<button name="btn2" (click)="onSubmit($event)">
+  Submit
+</button>
+
+<!-- Key Up Event -->
+<input (keyup)="onKeyUp($event)" type="text" />
+
+<div class="container m-2">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="bg-info m-5">
+        Selected product :
+        <span class="badge badge-danger">
+          {{ selectedProduct || "(None)" }}
+        </span>
+      </div>
+      <div
+        style="display: flex; flex-direction: row; flex-wrap: wrap;"
+        class="text-center"
+      >
+        <div
+          *ngFor="let item of model.getProducts()"
+          class="card"
+          (mouseover)="selectedProduct = item.name"
+          (mouseleave)="selectedProduct = '(None)'"
+          [class.bg-info]="getSelected(item)"
+          style="width: 250px;"
+        >
+          <img
+            src="assets/img/{{ item.imageUrl }}"
+            class="card-img-top"
+            alt="..."
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{ item.name }}</h5>
+            <p class="card-text">
+              {{ item.description }}
+            </p>
+            <a href="#" class="btn btn-primary">Price : {{ item.price }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Product Name</label>
+        <input
+          (keyup.enter)="selectedProduct = $event.target.value"
+          type="text"
+          class="form-control"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<input style="outline: none; user-select: none;" type="text" appInputEmail />
+
+<!-- Form with validation -->
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="m-3">
+        <form #form="ngForm" (ngSubmit)="submitForm(form)" >
+          <div class="bg-danger text-white p-3 my-2" *ngIf="formSubmitted && form.invalid" >
+              There is any error,please control informations
+          </div>
+          <div class="bg-info text-white m-2 p-2">
+            {{ jsonProduct }}
+          </div>
+          <div class="form-group">
+            <label>Name</label>
+            <input
+              required
+              minlength="3"
+              maxlength="10"
+              pattern="^[A-Za-z ]+$"
+              [(ngModel)]="newProduct.name"
+              type="text"
+              name="name"
+              #name="ngModel"
+              class="form-control"
+            />
+            <div class="alert alert-danger" *ngIf="!name.valid && name.touched">
+              <p *ngFor="let error of getValidationErrors(name)">
+                {{ error }}
+              </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea
+              required
+              minlength="3"
+              maxlength="10"
+              pattern="^[A-Za-z ]+$"
+              name="description"
+              #description="ngModel"
+              [(ngModel)]="newProduct.description"
+              type="text"
+              class="form-control"
+            ></textarea>
+
+            <div
+              class="alert alert-danger"
+              *ngIf="!description.valid && description.touched"
+            >
+              <p *ngFor="let error of getValidationErrors(description)">
+                {{ error }}
+              </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Image Url</label>
+            <input
+              required
+              minlength="3"
+              maxlength="10"
+              pattern="^[A-Za-z ]+$"
+              name="imageUrl"
+              #imageUrl="ngModel"
+              [(ngModel)]="newProduct.imageUrl"
+              type="text"
+              class="form-control"
+            />
+            <div
+              class="alert alert-danger"
+              *ngIf="!imageUrl.valid && imageUrl.touched"
+            >
+              <p *ngFor="let error of getValidationErrors(imageUrl)">
+                {{ error }}
+              </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Price</label>
+            <input
+              required
+              minlength="3"
+              maxlength="10"
+              pattern="^[A-Za-z ]+$"
+              name="price"
+              #price="ngModel"
+              [(ngModel)]="newProduct.price"
+              type="text"
+              class="form-control"
+            />
+            <div
+              class="alert alert-danger"
+              *ngIf="!price.valid && price.touched"
+            >
+              <p *ngFor="let error of getValidationErrors(price)">
+                {{ error }}
+              </p>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
